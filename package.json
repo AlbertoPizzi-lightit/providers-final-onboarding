@@ -55,7 +55,7 @@
     "@tanstack/react-table": "^8.21.3",
     "axios": "^1.13.2",
     "i18next": "^25.7.2",
-    "posthog-js": "^1.304.0",
+    "posthog-js": "^1.311.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-hook-form": "^7.68.0",
