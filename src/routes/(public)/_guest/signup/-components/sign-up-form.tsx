@@ -9,13 +9,13 @@ import { getLoginPayloadSchema, type LoginPayload, useLogin } from "@/services";
 import { setAuthStoreToken } from "@/stores";
 import { handleAxiosFieldErrors } from "@/utils";
 
-export const LoginForm = () => {
+export const RegisterForm = () => {
   const { t } = useTranslation();
 
   const loginMutation = useLogin();
 
   const router = useRouter();
-  const search = useSearch({ from: "/(public)/_guest/login/" });
+  const search = useSearch({ from: "/(public)/_guest/signup/" });
   const navigate = useNavigate();
 
   const {
@@ -45,6 +45,14 @@ export const LoginForm = () => {
   return (
     <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-2">
+        <Label htmlFor="fullName">{t("form.fullName")}</Label>
+
+        <Input {...register("fullName")} />
+
+        <ErrorMessage errorMessage={errors?.fullName?.message} />
+      </div>
+
+      <div className="flex flex-col gap-2">
         <Label htmlFor="email">{t("form.email")}</Label>
 
         <Input {...register("email")} />
@@ -55,13 +63,16 @@ export const LoginForm = () => {
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <Label htmlFor="password">{t("form.password")}</Label>
+        </div>
 
-          <Link
-            className="ml-auto inline-block text-sm underline-offset-4 hover:underline hover:opacity-80"
-            to="/"
-          >
-            {t("login.forgotYourPassword")}
-          </Link>
+        <PasswordInput {...register("password")} />
+
+        <ErrorMessage errorMessage={errors?.password?.message} />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center justify-between">
+          <Label htmlFor="password">{t("Confirm Password")}</Label>
         </div>
 
         <PasswordInput {...register("password")} />
@@ -70,7 +81,7 @@ export const LoginForm = () => {
       </div>
 
       <Button className="w-full" type="submit">
-        {t("login.login")}
+        {t("register")}
       </Button>
 
       <p className="text-center text-sm">
