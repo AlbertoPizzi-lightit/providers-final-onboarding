@@ -24,7 +24,6 @@ export const LoginForm = () => {
     register,
     setError,
   } = useForm({
-    mode: "onTouched",
     resolver: zodResolver(getLoginPayloadSchema()),
   });
 
@@ -43,44 +42,50 @@ export const LoginForm = () => {
   };
 
   return (
-    <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="email">{t("form.email")}</Label>
+    <>
+      <article>
+        <h1 className="py-1 text-3xl font-medium">{t("login.title")}</h1>
 
-        <Input {...register("email")} />
+        <p className="mb-6 text-sm text-gray-500">{t("login.subtitle")}</p>
+      </article>
 
-        <ErrorMessage errorMessage={errors?.email?.message} />
-      </div>
+      <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="email">{t("form.email")}</Label>
 
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="password">{t("form.password")}</Label>
+          <Input {...register("email")} error={typeof errors?.email?.message === "string"} />
 
-          <Link
-            className="ml-auto inline-block text-sm underline-offset-4 hover:underline hover:opacity-80"
-            to="/"
-          >
-            {t("login.forgotYourPassword")}
-          </Link>
+          <ErrorMessage errorMessage={errors?.email?.message} />
         </div>
 
-        <PasswordInput {...register("password")} />
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="password">{t("form.password")}</Label>
+          </div>
 
-        <ErrorMessage errorMessage={errors?.password?.message} />
-      </div>
+          <PasswordInput
+            {...register("password")}
+            error={typeof errors?.password?.message === "string"}
+          />
 
-      <Button className="w-full" type="submit">
-        {t("login.login")}
-      </Button>
+          <ErrorMessage errorMessage={errors?.password?.message} />
+        </div>
 
-      <p className="text-center text-sm">
-        <Trans
-          components={{
-            Link: <Link className="underline underline-offset-4 hover:opacity-80" to="/register" />,
-          }}
-          i18nKey="login.noAccount"
-        />
-      </p>
-    </form>
+        <Button className="w-full" type="submit">
+          {t("login.login")}
+        </Button>
+
+        <p className="text-center text-sm">
+          <Trans
+            components={{
+              Link: (
+                <Link className="underline underline-offset-4 hover:opacity-80" to="/register" />
+              ),
+            }}
+            i18nKey="login.noAccount"
+          />
+        </p>
+      </form>
+    </>
   );
 };
