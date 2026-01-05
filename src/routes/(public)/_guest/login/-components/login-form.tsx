@@ -2,6 +2,7 @@ import { type SubmitHandler, useForm } from "react-hook-form";
 import { Trans, useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate, useRouter, useSearch } from "@tanstack/react-router";
+import type { AxiosError } from "axios";
 import { toast } from "sonner";
 
 import { Button, ErrorMessage, Input, Label, PasswordInput } from "@/components";
@@ -19,7 +20,7 @@ export const LoginForm = () => {
   const navigate = useNavigate();
 
   const {
-    formState: { errors },
+    formState: { errors, isLoading, isSubmitting },
     handleSubmit,
     register,
     setError,
@@ -36,7 +37,12 @@ export const LoginForm = () => {
         await navigate({ to: search.redirect || "/" });
       },
       onError: (error) => {
-        handleAxiosFieldErrors<LoginPayload>(error, setError, t("login.error"));
+        if ((error as AxiosError).status === 401) {
+          setError("email", { type: "backend", message: " " });
+          setError("password", { type: "backend", message: t("login.invalidCredentials") });
+        } else {
+          handleAxiosFieldErrors<LoginPayload>(error, setError, t("login.error"));
+        }
       },
     });
   };
@@ -71,7 +77,7 @@ export const LoginForm = () => {
           <ErrorMessage errorMessage={errors?.password?.message} />
         </div>
 
-        <Button className="w-full" type="submit">
+        <Button className="w-full" isLoading={isLoading || isSubmitting} size="lg" type="submit">
           {t("login.login")}
         </Button>
 

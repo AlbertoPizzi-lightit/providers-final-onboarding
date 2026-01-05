@@ -39,9 +39,9 @@ const inputVariants = tv({
     },
     error: {
       true: {
-        input: "border-border-danger-tertiary",
-        leftIcon: "[&>button]:color-border-danger-tertiary",
-        rightIcon: "[&>button]:color-border-danger-tertiary",
+        input: "border-border-danger-tertiary text-border-danger-tertiary",
+        leftIcon: "[&_svg]:text-border-danger-tertiary",
+        rightIcon: "[&_svg]:text-border-danger-tertiary",
       },
     },
   },
