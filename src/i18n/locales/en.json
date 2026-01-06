@@ -39,7 +39,7 @@
     "forgotYourPassword": "Forgot your password?",
     "login": "Login",
     "noAccount": "Don't have an account? <Link>Sign up</Link>",
-    "error": {
+    "errors": {
       "failedLogin": "Not able to log in",
       "emptyPassword": "Password field is empty"
     },

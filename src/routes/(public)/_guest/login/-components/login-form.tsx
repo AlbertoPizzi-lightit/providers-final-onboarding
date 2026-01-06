@@ -30,9 +30,10 @@ export const LoginForm = () => {
 
   const onSubmit: SubmitHandler<LoginPayload> = (data) => {
     loginMutation.mutate(data, {
-      onSuccess: async ({ data: { authToken } }) => {
+      onSuccess: async ({ data: { data } }) => {
+        const { accessToken } = data;
         toast.success(t("login.success"));
-        setAuthStoreToken(authToken);
+        setAuthStoreToken(accessToken);
         await router.invalidate();
         await navigate({ to: search.redirect || "/" });
       },
@@ -59,7 +60,12 @@ export const LoginForm = () => {
         <div className="flex flex-col gap-2">
           <Label htmlFor="email">{t("form.email")}</Label>
 
-          <Input {...register("email")} error={typeof errors?.email?.message === "string"} />
+          <Input
+            {...register("email")}
+            autoComplete="username"
+            error={typeof errors?.email?.message === "string"}
+            placeholder={t("form.email")}
+          />
 
           <ErrorMessage errorMessage={errors?.email?.message} />
         </div>
@@ -71,7 +77,9 @@ export const LoginForm = () => {
 
           <PasswordInput
             {...register("password")}
+            autoComplete="current-password"
             error={typeof errors?.password?.message === "string"}
+            placeholder={t("form.password")}
           />
 
           <ErrorMessage errorMessage={errors?.password?.message} />
