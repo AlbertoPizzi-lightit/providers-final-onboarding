@@ -1,17 +1,17 @@
-import { useTranslation } from "react-i18next";
+// import { useTranslation } from "react-i18next";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
-import type { AvailableRoutesToPath } from "@/config/router";
+// import type { AvailableRoutesToPath } from "@/config/router";
 import { getAuthStoreState } from "@/stores";
 
 const PrivateLayout = () => {
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
 
-  const links: { path: AvailableRoutesToPath; label: string }[] = [
-    { path: "/", label: t("navigation.links.home") },
-    { path: "/dashboard", label: t("navigation.links.dashboard") },
-    { path: "/users", label: t("navigation.links.users") },
-  ];
+  // const links: { path: AvailableRoutesToPath; label: string }[] = [
+  //   { path: "/", label: t("navigation.links.home") },
+  //   { path: "/dashboard", label: t("navigation.links.dashboard") },
+  //   { path: "/users", label: t("navigation.links.users") },
+  // ];
 
   return (
     <div>
