@@ -1,8 +1,8 @@
 import { type ChangeEvent, useState } from "react";
 
-import { DropdownMenu } from "../dropdown-menu";
+import { Button, DropdownMenu } from "@/components/ui";
 import { SearchIcon } from "../icons/search-icon";
-import { defaultAllOption, selectedFilters } from "./constants";
+import { defaultAllOption, defaultFilterNames, selectedFilters } from "./constants";
 import { getClinics, getGenders, getSpecialties } from "./functions";
 import type { FilterContainerProps, FilterKeys, MenuDataType, SelectedFilter } from "./types";
 
@@ -23,16 +23,16 @@ export const FilterContainer = ({
       const matchesSearch = item.doctorName.toLowerCase().includes(search.toLowerCase());
 
       const matchesSpecialty =
-        filters.specialties.option === defaultAllOption.allSpecialties ||
-        item.doctorSpecialty === filters.specialties.option;
+        filters.specialties.label === defaultAllOption.allSpecialties ||
+        item.doctorSpecialty === filters.specialties.label;
 
       const matchesGender =
-        filters.genders.option === defaultAllOption.allGenders ||
-        item.gender === filters.genders.option.toLowerCase();
+        filters.genders.label === defaultAllOption.allGenders ||
+        item.gender === filters.genders.label.toLowerCase();
 
       const matchesClinic =
-        filters.clinics.option === defaultAllOption.allClinics ||
-        item.medicalCenter === filters.clinics.option;
+        filters.clinics.label === defaultAllOption.allClinics ||
+        item.medicalCenter === filters.clinics.label;
 
       return matchesSearch && matchesSpecialty && matchesGender && matchesClinic;
     });
@@ -99,9 +99,9 @@ export const FilterContainer = ({
   return (
     <div className="flex flex-col">
       <div className="relative">
-        <SearchIcon className="text-disabled-text absolute top-2 left-3 size-5" />
+        <SearchIcon className="absolute top-2 left-3 size-5 text-disabled-text" />
         <input
-          className="border-border focus:ring-primary/60 focus:border-primary/60 w-full rounded-md border px-3 py-2 ps-10 text-sm placeholder:text-gray-400 focus:ring-2 focus:outline-none"
+          className="focus:ring-primary/60 focus:border-primary/60 w-full rounded-md border border-border px-3 py-2 ps-10 text-sm placeholder:text-gray-400 focus:ring-2 focus:outline-none"
           id="searchProviders"
           name="searchProviders"
           onChange={handleSearch}
@@ -112,7 +112,34 @@ export const FilterContainer = ({
 
       <div className="flex flex-wrap gap-5 pt-5 sm:gap-1">
         {Object.values(menuData).map((data, index) => {
-          return <DropdownMenu {...data} key={data.name + index} />;
+          return (
+            <div className="relative w-full min-w-70 md:max-w-[70px]" key={data.name + index}>
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger
+                  className="flex w-full items-center justify-between rounded-lg border border-border bg-base-background p-3 text-base-text shadow-sm focus:ring-2 focus:ring-disabled-text focus:outline-none disabled:bg-disabled-text"
+                  asChild
+                >
+                  <Button className="ml-auto" variant="outlined">
+                    {defaultFilterNames[data.name]}
+                  </Button>
+                </DropdownMenu.Trigger>
+
+                <DropdownMenu.Content align="end" className="w-full">
+                  {data.options.map((option) => {
+                    return (
+                      <DropdownMenu.CheckboxItem
+                        checked={option.checked}
+                        className="w-full capitalize"
+                        key={option.label}
+                      >
+                        {option.label}
+                      </DropdownMenu.CheckboxItem>
+                    );
+                  })}
+                </DropdownMenu.Content>
+              </DropdownMenu.Root>
+            </div>
+          );
         })}
       </div>
     </div>

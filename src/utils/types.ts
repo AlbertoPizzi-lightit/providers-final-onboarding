@@ -9,7 +9,6 @@ export type Data = {
   profile_pic: string;
   specialty: Specialty;
   clinics: Clinic[];
-  is_favorited: boolean;
 };
 
 export type Clinic = {

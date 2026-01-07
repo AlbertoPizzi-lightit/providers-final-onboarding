@@ -379,4 +379,22 @@ code {
   --color-text-warning-on-warning-tertiary: var(--orange-800);
   --color-text-warning-secondary: var(--orange-600);
   --color-text-warning-tertiary: var(--orange-500);
+  
+  --color-button: #2e364c;
+  --color-text-default: #1c202e;
+  --color-border: #d1d2d9;
+  --color-danger: #b91c1c;
+  --color-banner-bg: #fafafb;
+  --color-disabled-bg: #e7e8eb;
+  --color-disabled-text: #757a88;
+  --color-base-text: #1c202e;
+  --color-success: #22c55e;
+  --font-sans: "DM Sans", sans-serif;
+  --color-base-background: white;
+  --color-base-border: #d1d2d9;
+  --color-provider-banner-background: #fafafb;
+  --color-description-text: #5a5f70;
+  --base-button-background-color: #2e364c;
+  --base-name-color: #1c202e;
+  --color-placeholder: #757a88;
 }

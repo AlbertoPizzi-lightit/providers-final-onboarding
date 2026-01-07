@@ -7,7 +7,13 @@ export const defaultAllOption = {
 } as const;
 
 export const selectedFilters: SelectedFilter = {
-  specialties: { option: defaultAllOption.allSpecialties },
-  clinics: { option: defaultAllOption.allClinics },
-  genders: { option: defaultAllOption.allGenders },
+  specialties: { label: defaultAllOption.allSpecialties, checked: false },
+  clinics: { label: defaultAllOption.allClinics, checked: false },
+  genders: { label: defaultAllOption.allGenders, checked: false },
 };
+
+export const defaultFilterNames = {
+  clinics: defaultAllOption.allClinics,
+  specialties: defaultAllOption.allSpecialties,
+  genders: defaultAllOption.allGenders,
+} as const;
