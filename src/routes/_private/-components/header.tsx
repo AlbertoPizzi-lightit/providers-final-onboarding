@@ -1,17 +1,9 @@
-import { useTranslation } from "react-i18next";
+import type { PropsWithChildren } from "react";
 
-import { HamburgerMenu } from "./hamburger-menu";
-
-export const Header = () => {
-  const { t } = useTranslation();
-
+export const Header = ({ children }: PropsWithChildren) => {
   return (
-    <header className="flex items-center justify-between bg-background-brand-default p-4 text-text-brand-on-brand">
-      <img className="h-10" src="./logo.svg" />
-
-      <span>{t("greetings.rootLayout")}</span>
-
-      <HamburgerMenu />
-    </header>
+    <nav className="border-b-base-border bg-base-background fixed top-0 left-0 z-10 flex w-full flex-wrap border-b p-6">
+      {children}
+    </nav>
   );
 };

@@ -1,10 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
-import { NavigationMenu } from "@/components";
 import type { AvailableRoutesToPath } from "@/config/router";
 import { getAuthStoreState } from "@/stores";
-import { Header } from "./-components";
 
 const PrivateLayout = () => {
   const { t } = useTranslation();
@@ -17,7 +15,7 @@ const PrivateLayout = () => {
 
   return (
     <div>
-      <Header />
+      {/* <Header />
 
       <main className="flex flex-col gap-4 p-4">
         <NavigationMenu.Root>
@@ -32,8 +30,8 @@ const PrivateLayout = () => {
           </NavigationMenu.List>
         </NavigationMenu.Root>
 
-        <Outlet />
-      </main>
+      </main> */}
+      <Outlet />
     </div>
   );
 };
