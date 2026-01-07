@@ -4,8 +4,8 @@ import { LoginForm } from "./-components";
 
 const LoginPage = () => {
   return (
-    <div className="flex flex-1 flex-col items-center justify-center">
-      <div className="w-96 rounded-2xl p-5 shadow">
+    <div className="flex flex-1 flex-col items-center justify-center bg-linear-to-b from-background-default-default to-background-default-secondary">
+      <div className="w-96 rounded-2xl border border-background-default-tertiary bg-background-default-default p-5">
         <LoginForm />
       </div>
     </div>

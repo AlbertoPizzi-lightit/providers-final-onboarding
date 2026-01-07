@@ -37,6 +37,13 @@ const inputVariants = tv({
       [SIZE.LARGE]: { input: "pr-10" },
       [SIZE.X_LARGE]: { input: "pr-11" },
     },
+    error: {
+      true: {
+        input: "border-border-danger-tertiary text-border-danger-tertiary",
+        leftIcon: "[&_svg]:text-border-danger-tertiary",
+        rightIcon: "[&_svg]:text-border-danger-tertiary",
+      },
+    },
   },
 });
 
@@ -47,12 +54,14 @@ type InputProps = {
   left?: ReactNode;
   right?: ReactNode;
   size?: Size;
+  error?: boolean;
 } & Omit<ComponentProps<"input">, "size"> &
   Styled;
 
 export const Input = ({
   className,
   containerClassName,
+  error,
   left,
   right,
   size = SIZE.MEDIUM,
@@ -62,7 +71,7 @@ export const Input = ({
     <div className={container({ className: containerClassName })}>
       <div className={wrapper()}>
         {left ? (
-          <IconWrapper className={leftIcon()} size={size}>
+          <IconWrapper className={leftIcon({ error })} size={size}>
             {left}
           </IconWrapper>
         ) : null}
@@ -73,12 +82,13 @@ export const Input = ({
             size,
             left: left ? size : undefined,
             right: right ? size : undefined,
+            error,
           })}
           {...props}
         />
 
         {right ? (
-          <IconWrapper className={rightIcon()} size={size}>
+          <IconWrapper className={rightIcon({ error })} size={size}>
             {right}
           </IconWrapper>
         ) : null}

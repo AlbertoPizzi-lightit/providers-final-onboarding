@@ -2,6 +2,7 @@ import { type SubmitHandler, useForm } from "react-hook-form";
 import { Trans, useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate, useRouter, useSearch } from "@tanstack/react-router";
+import type { AxiosError } from "axios";
 import { toast } from "sonner";
 
 import { Button, ErrorMessage, Input, Label, PasswordInput } from "@/components";
@@ -19,68 +20,86 @@ export const LoginForm = () => {
   const navigate = useNavigate();
 
   const {
-    formState: { errors },
+    formState: { errors, isLoading, isSubmitting },
     handleSubmit,
     register,
     setError,
   } = useForm({
-    mode: "onTouched",
     resolver: zodResolver(getLoginPayloadSchema()),
   });
 
   const onSubmit: SubmitHandler<LoginPayload> = (data) => {
-    loginMutation.mutate(data, {
-      onSuccess: async ({ data: { authToken } }) => {
+    return loginMutation.mutateAsync(data, {
+      onSuccess: async ({ data: { data } }) => {
+        const { accessToken } = data;
         toast.success(t("login.success"));
-        setAuthStoreToken(authToken);
+        setAuthStoreToken(accessToken);
         await router.invalidate();
         await navigate({ to: search.redirect || "/" });
       },
       onError: (error) => {
-        handleAxiosFieldErrors<LoginPayload>(error, setError, t("login.error"));
+        if ((error as AxiosError).status === 401) {
+          setError("email", { type: "backend", message: " " });
+          setError("password", { type: "backend", message: t("login.invalidCredentials") });
+        } else {
+          handleAxiosFieldErrors<LoginPayload>(error, setError, t("login.errors.failedLogin"));
+        }
       },
     });
   };
 
   return (
-    <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="email">{t("form.email")}</Label>
+    <>
+      <article>
+        <h1 className="py-1 text-3xl font-medium">{t("login.title")}</h1>
 
-        <Input {...register("email")} />
+        <p className="mb-6 text-sm text-gray-500">{t("login.subtitle")}</p>
+      </article>
 
-        <ErrorMessage errorMessage={errors?.email?.message} />
-      </div>
+      <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="email">{t("form.email")}</Label>
 
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="password">{t("form.password")}</Label>
+          <Input
+            {...register("email")}
+            autoComplete="username"
+            error={typeof errors?.email?.message === "string"}
+            placeholder={t("form.email")}
+          />
 
-          <Link
-            className="ml-auto inline-block text-sm underline-offset-4 hover:underline hover:opacity-80"
-            to="/"
-          >
-            {t("login.forgotYourPassword")}
-          </Link>
+          <ErrorMessage errorMessage={errors?.email?.message} />
         </div>
 
-        <PasswordInput {...register("password")} />
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="password">{t("form.password")}</Label>
+          </div>
 
-        <ErrorMessage errorMessage={errors?.password?.message} />
-      </div>
+          <PasswordInput
+            {...register("password")}
+            autoComplete="current-password"
+            error={typeof errors?.password?.message === "string"}
+            placeholder={t("form.password")}
+          />
 
-      <Button className="w-full" type="submit">
-        {t("login.login")}
-      </Button>
+          <ErrorMessage errorMessage={errors?.password?.message} />
+        </div>
 
-      <p className="text-center text-sm">
-        <Trans
-          components={{
-            Link: <Link className="underline underline-offset-4 hover:opacity-80" to="/register" />,
-          }}
-          i18nKey="login.noAccount"
-        />
-      </p>
-    </form>
+        <Button className="w-full" isLoading={isLoading || isSubmitting} size="lg" type="submit">
+          {t("login.login")}
+        </Button>
+
+        <p className="text-center text-sm">
+          <Trans
+            components={{
+              Link: (
+                <Link className="underline underline-offset-4 hover:opacity-80" to="/register" />
+              ),
+            }}
+            i18nKey="login.noAccount"
+          />
+        </p>
+      </form>
+    </>
   );
 };
