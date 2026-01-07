@@ -9,7 +9,7 @@ export const useLogin = (props?: UseMutationProps<typeof mutations.login>) => {
   return useMutation({
     mutationFn: mutations.login,
     onError: () => {
-      toast.error(i18n.t("login.error"));
+      toast.error(i18n.t("login.errors.failedLogin"));
     },
     ...props,
   });

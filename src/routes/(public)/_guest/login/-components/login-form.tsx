@@ -29,7 +29,7 @@ export const LoginForm = () => {
   });
 
   const onSubmit: SubmitHandler<LoginPayload> = (data) => {
-    loginMutation.mutate(data, {
+    return loginMutation.mutateAsync(data, {
       onSuccess: async ({ data: { data } }) => {
         const { accessToken } = data;
         toast.success(t("login.success"));
@@ -42,7 +42,7 @@ export const LoginForm = () => {
           setError("email", { type: "backend", message: " " });
           setError("password", { type: "backend", message: t("login.invalidCredentials") });
         } else {
-          handleAxiosFieldErrors<LoginPayload>(error, setError, t("login.error"));
+          handleAxiosFieldErrors<LoginPayload>(error, setError, t("login.errors.failedLogin"));
         }
       },
     });
