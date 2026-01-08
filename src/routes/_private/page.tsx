@@ -26,7 +26,6 @@ export type ProviderBanner = {
 
 const ProvidersPage = () => {
   const providers = getProviders();
-
   const [providerBannerInfo, setProviderBannerInfo] = useState<ProviderBanner[]>([]);
   const [filteredProviderBannerInfo, setFilteredProviderBannerInfo] = useState<
     ProviderBanner[] | null
