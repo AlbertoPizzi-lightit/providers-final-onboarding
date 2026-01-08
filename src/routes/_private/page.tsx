@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 
-import { privateApi } from "@/config/api";
-import { API_URL, type Clinic, type Data } from "@/utils";
+import { getProviders } from "@/services/providers/api";
+import { type Clinic } from "@/utils";
 import {
   Header,
   HealthProvidersContainer,
@@ -23,48 +23,16 @@ export type ProviderBanner = {
   clinics: Clinic[];
   gender: string;
 };
-const getData = async () => {
-  const request = await privateApi.get(API_URL.providersApiUrl);
-
-  const data: Record<"data", Data[]> = request.data;
-
-  const processedData = data.data.map(
-    ({ clinics, gender, name: doctorName, profile_pic: image, specialty }) => {
-      return {
-        image,
-        doctorName,
-        doctorSpecialty: specialty.name,
-        medicalCenter: clinics[0].name,
-        locationQty: clinics.length,
-        clinics,
-        gender,
-      };
-    },
-  );
-
-  return processedData;
-};
 
 const ProvidersPage = () => {
+  const providers = getProviders();
+
   const [providerBannerInfo, setProviderBannerInfo] = useState<ProviderBanner[]>([]);
   const [filteredProviderBannerInfo, setFilteredProviderBannerInfo] = useState<
     ProviderBanner[] | null
   >(null);
 
   const isFiltered = filteredProviderBannerInfo !== null;
-
-  useEffect(() => {
-    let ignore = false;
-    getData().then((providerBannerData) => {
-      if (!ignore) {
-        setProviderBannerInfo(providerBannerData);
-      }
-    });
-
-    return () => {
-      ignore = true;
-    };
-  }, []);
 
   return (
     <div className="mx-auto my-0 flex h-full max-w-6xl flex-col pt-25">

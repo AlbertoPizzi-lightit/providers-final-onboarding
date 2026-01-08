@@ -108,5 +108,16 @@
       "dashboard": "Dashboard",
       "users": "Users"
     }
+  },
+  "providers": {
+    "healthcareProvidersContainer": {
+      "title": "Healthcare Providers",
+      "description": "Find and connect with healthcare professionals in your area",
+      "providersFound": "providers found"
+    },
+    "banner":{
+      "locations": "+  more locations",
+      "viewDetails": "View Details"
+    }
   }
 }
