@@ -11,4 +11,12 @@ export const queries = createQueryKeys("providers", {
       },
     };
   },
+  // list: () => {
+  //   return {
+  //     queryKey: ["providers"],
+  //     queryFn: () => {
+  //       getProviders();
+  //     },
+  //   };
+  // },
 });

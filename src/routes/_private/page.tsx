@@ -1,37 +1,29 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 
-import { getProviders } from "@/services/providers/api";
-import { type Clinic } from "@/utils";
+import { type Providers, useProviders } from "@/services";
 import {
   Header,
   HealthProvidersContainer,
   Logo,
   Nav,
   ProfilePicture,
-  ProviderBanner,
   ProvidersContainer,
   TableHeaderContainer,
 } from "./-components";
 
-export type ProviderBanner = {
-  image: string;
-  doctorName: string;
-  doctorSpecialty: string;
-  medicalCenter: string;
-  locationQty: number;
-  clinics: Clinic[];
-  gender: string;
-};
-
 const ProvidersPage = () => {
-  const providers = getProviders();
-  const [providerBannerInfo, setProviderBannerInfo] = useState<ProviderBanner[]>([]);
-  const [filteredProviderBannerInfo, setFilteredProviderBannerInfo] = useState<
-    ProviderBanner[] | null
-  >(null);
+  const { data: providerBannerInfo, isLoading, isSuccess } = useProviders({});
+
+  console.log(providerBannerInfo);
+
+  const [filteredProviderBannerInfo, setFilteredProviderBannerInfo] = useState<Providers[] | null>(
+    null,
+  );
 
   const isFiltered = filteredProviderBannerInfo !== null;
+
+  console.log(providerBannerInfo);
 
   return (
     <div className="mx-auto my-0 flex h-full max-w-6xl flex-col pt-25">
@@ -46,15 +38,15 @@ const ProvidersPage = () => {
       <TableHeaderContainer>
         <HealthProvidersContainer
           filteredProviderBannerInfo={filteredProviderBannerInfo}
-          providerBannerInfo={providerBannerInfo}
+          providerBannerInfo={providerBannerInfo?.data ?? []}
           setProviderBannerInfo={setFilteredProviderBannerInfo}
         />
       </TableHeaderContainer>
 
       <ProvidersContainer>
-        {(isFiltered ? filteredProviderBannerInfo : providerBannerInfo).map((doctorData, index) => {
+        {/* {(isFiltered ? filteredProviderBannerInfo : providerBannerInfo?.data).map((doctorData, index) => {
           return <ProviderBanner key={doctorData.doctorName + index} {...doctorData} />;
-        })}
+        })} */}
       </ProvidersContainer>
     </div>
   );

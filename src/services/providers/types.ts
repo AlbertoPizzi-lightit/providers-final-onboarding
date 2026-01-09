@@ -1,34 +1,28 @@
-import type { z } from "zod";
+import type z from "zod";
 
-import type { getLoginPayloadSchema, loginResponseSchema } from "./schemas";
+import type { getProvidersSchema } from "./schemas";
 
-export type LoginPayload = z.infer<ReturnType<typeof getLoginPayloadSchema>>;
-export type LoginResponse = z.infer<typeof loginResponseSchema>;
-export type ServiceResponse<T> = {
-  transitional: Transitional;
-  adapter: string[];
-  transformRequest: null[];
-  transformResponse: null[];
-  timeout: number;
-  xsrfCookieName: string;
-  xsrfHeaderName: string;
-  maxContentLength: number;
-  maxBodyLength: number;
-  headers: Headers;
-  baseURL: string;
-  method: string;
-  url: string;
-  data: T;
-  allowAbsoluteUrls: boolean;
+export type Providers = z.infer<ReturnType<typeof getProvidersSchema>>;
+
+export type FilterKeys = "specialties" | "genders" | "clinics";
+
+export type Clinic = {
+  id: number;
+  name: string;
+  address: string;
+  city: string;
+  state: string;
+  zip_code: string;
+  phone: string;
 };
 
-export type Headers = {
-  accept: string;
-  contentType: string;
-};
+export const Gender = {
+  Female: "female",
+  Male: "male",
+  Other: "other",
+} as const;
 
-export type Transitional = {
-  silentJSONParsing: boolean;
-  forcedJSONParsing: boolean;
-  clarifyTimeoutError: boolean;
+export type Specialty = {
+  id: number;
+  name: string;
 };

@@ -1,13 +1,28 @@
 import { z } from "zod";
 
-import i18n from "@/i18n";
+import { Gender } from "./types";
 
 export const getProvidersSchema = () => {
   return z.object({
     id: z.number(),
     name: z.string(),
-    emailAddress: z.email({
-      message: i18n.t("form.errors.invalidField", { field: i18n.t("form.email") }),
-    }),
+    email: z.string(),
+    phone: z.string(),
+    gender: z.enum(Object.keys(Gender)),
+    about: z.string(),
+    languages: z.array(z.string()),
+    profile_pic: z.string(),
+    specialty: z.object({ id: z.number, name: z.string() }),
+    clinics: z.array(
+      z.object({
+        id: z.number(),
+        name: z.string(),
+        address: z.string(),
+        city: z.string(),
+        state: z.string(),
+        zip_code: z.string(),
+        phone: z.string(),
+      }),
+    ),
   });
 };

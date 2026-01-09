@@ -1,13 +1,14 @@
 import type { Dispatch, SetStateAction } from "react";
 import { useTranslation } from "react-i18next";
 
-import type { ProviderBanner } from "../page";
+import type { Providers } from "@/services";
+
 // import { FilterContainer } from "./filter-container";
 
 type HealthCareProvidersContainerProps = {
-  providerBannerInfo: ProviderBanner[];
-  setProviderBannerInfo: Dispatch<SetStateAction<ProviderBanner[] | null>>;
-  filteredProviderBannerInfo: ProviderBanner[] | null;
+  providerBannerInfo: Providers[];
+  setProviderBannerInfo: Dispatch<SetStateAction<Providers[] | null>>;
+  filteredProviderBannerInfo: Providers[] | null;
 };
 
 export const HealthProvidersContainer = ({
