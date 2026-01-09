@@ -13,7 +13,10 @@ import {
 } from "./-components";
 
 const ProvidersPage = () => {
-  const { data: providerBannerInfo, isLoading, isSuccess } = useProviders({});
+  const {
+    data: providerBannerInfo,
+    // isLoading, isSuccess
+  } = useProviders({});
 
   console.log(providerBannerInfo);
 
@@ -21,7 +24,7 @@ const ProvidersPage = () => {
     null,
   );
 
-  const isFiltered = filteredProviderBannerInfo !== null;
+  // const isFiltered = filteredProviderBannerInfo !== null;
 
   console.log(providerBannerInfo);
 
