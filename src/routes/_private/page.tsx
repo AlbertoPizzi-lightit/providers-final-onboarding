@@ -8,25 +8,19 @@ import {
   Logo,
   Nav,
   ProfilePicture,
+  ProviderBanner,
   ProvidersContainer,
   TableHeaderContainer,
 } from "./-components";
 
 const ProvidersPage = () => {
-  const {
-    data: providerBannerInfo,
-    // isLoading, isSuccess
-  } = useProviders({});
-
-  console.log(providerBannerInfo);
+  const { data: providerBannerInfo, isLoading, isSuccess } = useProviders();
 
   const [filteredProviderBannerInfo, setFilteredProviderBannerInfo] = useState<Providers[] | null>(
     null,
   );
 
-  // const isFiltered = filteredProviderBannerInfo !== null;
-
-  console.log(providerBannerInfo);
+  const isFiltered = filteredProviderBannerInfo !== null;
 
   return (
     <div className="mx-auto my-0 flex h-full max-w-6xl flex-col pt-25">
@@ -47,9 +41,11 @@ const ProvidersPage = () => {
       </TableHeaderContainer>
 
       <ProvidersContainer>
-        {/* {(isFiltered ? filteredProviderBannerInfo : providerBannerInfo?.data).map((doctorData, index) => {
-          return <ProviderBanner key={doctorData.doctorName + index} {...doctorData} />;
-        })} */}
+        {(isFiltered ? (filteredProviderBannerInfo ?? []) : (providerBannerInfo?.data ?? [])).map(
+          (doctorData, index) => {
+            return <ProviderBanner key={doctorData.name + index} {...doctorData} />;
+          },
+        )}
       </ProvidersContainer>
     </div>
   );
