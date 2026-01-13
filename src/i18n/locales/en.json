@@ -115,14 +115,17 @@
       "description": "Find and connect with healthcare professionals in your area",
       "providersFound": "providers found"
     },
-    "banner":{
+    "banner": {
       "plus": "+",
       "locations": "more locations",
       "viewDetails": "View Details"
     },
-    "logo":{
+    "logo": {
       "title": "HealthConnect",
       "description": "Find your healthcare provider"
+    },
+    "profile":{
+      "name": "AS"
     }
   }
 }
