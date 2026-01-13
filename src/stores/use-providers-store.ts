@@ -1,10 +1,10 @@
 import { create } from "zustand";
 
-export type AuthStoreState = {
+export type ProviderStoreState = {
   name: string | null;
 };
 
-const useProvidersStore = create<AuthStoreState>()((set) => {
+const useProvidersStore = create<ProviderStoreState>()((set) => {
   return {
     name: "",
     setProviderName: (name: string) => {

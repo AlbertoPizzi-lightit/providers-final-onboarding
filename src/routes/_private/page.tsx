@@ -1,7 +1,8 @@
-import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { z } from "zod";
 
-import { type Providers, useProviders } from "@/services";
+import { providerFiltersValidation, useDebounce, useProviderFilters } from "@/hooks";
+import { PROVIDER_FILTER_KEYS, useProviders } from "@/services";
 import {
   Header,
   HealthProvidersContainer,
@@ -14,13 +15,19 @@ import {
 } from "./-components";
 
 const ProvidersPage = () => {
-  const { data: providerBannerInfo, isLoading, isSuccess } = useProviders();
+  const { filters } = useProviderFilters(Route.id);
+  const debouncedName = useDebounce(filters.name, 500);
 
-  const [filteredProviderBannerInfo, setFilteredProviderBannerInfo] = useState<Providers[] | null>(
-    null,
-  );
+  const { data: allProvidersData } = useProviders();
 
-  const isFiltered = filteredProviderBannerInfo !== null;
+  const { data: providerBannerInfo, isLoading } = useProviders({
+    filter: {
+      [PROVIDER_FILTER_KEYS.NAME]: debouncedName,
+      [PROVIDER_FILTER_KEYS.SPECIALTY_ID]: filters.specialty_id,
+      [PROVIDER_FILTER_KEYS.GENDER]: filters.gender,
+      [PROVIDER_FILTER_KEYS.CLINIC_ID]: filters.clinic_id,
+    },
+  });
 
   return (
     <div className="mx-auto my-0 flex h-full max-w-6xl flex-col pt-25">
@@ -34,18 +41,16 @@ const ProvidersPage = () => {
 
       <TableHeaderContainer>
         <HealthProvidersContainer
-          filteredProviderBannerInfo={filteredProviderBannerInfo}
+          allProvidersForFilters={allProvidersData?.data ?? []}
+          isLoading={isLoading}
           providerBannerInfo={providerBannerInfo?.data ?? []}
-          setProviderBannerInfo={setFilteredProviderBannerInfo}
         />
       </TableHeaderContainer>
 
       <ProvidersContainer>
-        {(isFiltered ? (filteredProviderBannerInfo ?? []) : (providerBannerInfo?.data ?? [])).map(
-          (doctorData, index) => {
-            return <ProviderBanner key={doctorData.name + index} {...doctorData} />;
-          },
-        )}
+        {(providerBannerInfo?.data ?? []).map((doctorData, index) => {
+          return <ProviderBanner key={doctorData.name + index} {...doctorData} />;
+        })}
       </ProvidersContainer>
     </div>
   );
@@ -53,4 +58,7 @@ const ProvidersPage = () => {
 
 export const Route = createFileRoute("/_private/")({
   component: ProvidersPage,
+  validateSearch: z.object({
+    ...providerFiltersValidation.shape,
+  }),
 });

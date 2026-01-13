@@ -1,7 +1,11 @@
+import { useTranslation } from "react-i18next";
+
 import type { Providers } from "@/services";
 import { LocationIcon } from "./icons/location-icon";
 
 export const ProviderBanner = ({ clinics, name, profilePic, specialty }: Providers) => {
+  const { t } = useTranslation();
+
   return (
     <div className="flex h-122 min-w-88 flex-col overflow-hidden rounded-xl border border-border border-b-border bg-banner-bg">
       <div className="relative">
@@ -29,7 +33,7 @@ export const ProviderBanner = ({ clinics, name, profilePic, specialty }: Provide
           <article className="flex flex-col text-description-text">
             <p>{clinics[0].name}</p>
 
-            <p>+ {clinics.length} more locations</p>
+            <p>{`${t("providers.banner.plus")} ${clinics.length} ${t("providers.banner.locations")}`}</p>
           </article>
         </article>
 
@@ -38,7 +42,7 @@ export const ProviderBanner = ({ clinics, name, profilePic, specialty }: Provide
             aria-label="This is a view details button"
             className="h-10 w-75 rounded-md border-0 bg-button text-base-background"
           >
-            View Details
+            {t("providers.banner.viewDetails")}
           </button>
         </div>
       </div>

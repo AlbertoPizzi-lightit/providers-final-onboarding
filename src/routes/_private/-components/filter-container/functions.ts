@@ -1,32 +1,47 @@
-import { type Clinic, uppercaseFirstLetter } from "@/utils";
+import { uppercaseFirstLetter } from "@/utils";
 import { selectedFilters } from "./constants";
 import type { ProvidersDropdownOptionsType } from "./types";
 
-export const getClinics = (clinics: Clinic[]): ProvidersDropdownOptionsType => {
-  const availableClinics = clinics.map(({ name }) => {
-    return { label: name, checked: false };
+export const getClinics = (
+  clinics: Array<{ id: number; name: string }>,
+): ProvidersDropdownOptionsType => {
+  const uniqueClinicsMap = new Map<number, { id: number; name: string }>();
+
+  clinics.forEach((clinic) => {
+    if (!uniqueClinicsMap.has(clinic.id)) {
+      uniqueClinicsMap.set(clinic.id, clinic);
+    }
   });
 
-  const uniqueClinics = [selectedFilters.clinics, ...new Set(availableClinics)];
+  const uniqueClinics = Array.from(uniqueClinicsMap.values()).map((clinic) => {
+    return { id: clinic.id, label: clinic.name, checked: false };
+  });
 
-  return uniqueClinics;
+  return [selectedFilters.clinics, ...uniqueClinics];
 };
 
-export const getSpecialties = (specialties: string[]): ProvidersDropdownOptionsType => {
-  const mappedSpecialties = specialties.map((specialty) => {
-    return { label: specialty, checked: false };
-  });
-  const uniqueSpecialties = [selectedFilters.specialties, ...new Set(mappedSpecialties)];
+export const getSpecialties = (
+  specialties: Array<{ id: number; name: string }>,
+): ProvidersDropdownOptionsType => {
+  const uniqueSpecialtiesMap = new Map<number, { id: number; name: string }>();
 
-  return uniqueSpecialties;
+  specialties.forEach((specialty) => {
+    if (!uniqueSpecialtiesMap.has(specialty.id)) {
+      uniqueSpecialtiesMap.set(specialty.id, specialty);
+    }
+  });
+
+  const uniqueSpecialties = Array.from(uniqueSpecialtiesMap.values()).map((specialty) => {
+    return { id: specialty.id, label: specialty.name, checked: false };
+  });
+
+  return [selectedFilters.specialties, ...uniqueSpecialties];
 };
 
 export const getGenders = (genders: string[]): ProvidersDropdownOptionsType => {
-  const mappedGenders = genders.map((gender) => {
+  const uniqueGenders = Array.from(new Set(genders)).map((gender) => {
     return { label: uppercaseFirstLetter(gender), checked: false };
   });
 
-  const uniqueGenders = [selectedFilters.genders, ...new Set(mappedGenders)];
-
-  return uniqueGenders;
+  return [selectedFilters.genders, ...uniqueGenders];
 };

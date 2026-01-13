@@ -11,11 +11,14 @@ export type SelectedFilter = Record<
 export type MenuDataValues = {
   name: FilterKeys;
   options: ProvidersDropdownOptionsType;
-  filterData: (selectedSpecialty: string, filterName: FilterKeys) => void;
+  filterData: (
+    selectedOption: { id?: string | number; label: string },
+    filterName: FilterKeys,
+  ) => void;
 };
 
 export type MenuDataType = Record<FilterKeys, MenuDataValues>;
 
 export type ProvidersDropdownOptionsType = DropdownOptionsType[];
 
-export type DropdownOptionsType = { label: string; checked: boolean };
+export type DropdownOptionsType = { id?: string | number; label: string; checked: boolean };

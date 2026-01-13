@@ -116,8 +116,13 @@
       "providersFound": "providers found"
     },
     "banner":{
-      "locations": "+  more locations",
+      "plus": "+",
+      "locations": "more locations",
       "viewDetails": "View Details"
+    },
+    "logo":{
+      "title": "HealthConnect",
+      "description": "Find your healthcare provider"
     }
   }
 }

@@ -1,26 +1,19 @@
-import type { Dispatch, SetStateAction } from "react";
 import { useTranslation } from "react-i18next";
 
 import type { Providers } from "@/services";
-
-// import { FilterContainer } from "./filter-container";
+import { FilterContainer } from "./filter-container";
 
 type HealthCareProvidersContainerProps = {
+  allProvidersForFilters: Providers[];
+  isLoading?: boolean;
   providerBannerInfo: Providers[];
-  setProviderBannerInfo: Dispatch<SetStateAction<Providers[] | null>>;
-  filteredProviderBannerInfo: Providers[] | null;
 };
 
 export const HealthProvidersContainer = ({
-  filteredProviderBannerInfo,
+  allProvidersForFilters,
+  isLoading = false,
   providerBannerInfo,
-  // setProviderBannerInfo,
 }: HealthCareProvidersContainerProps) => {
-  const numberOfProviders = () => {
-    return filteredProviderBannerInfo !== null
-      ? filteredProviderBannerInfo.length
-      : providerBannerInfo.length;
-  };
   const { t } = useTranslation();
 
   return (
@@ -35,15 +28,20 @@ export const HealthProvidersContainer = ({
         </p>
       </article>
 
-      {/* <FilterContainer
-        filteredProviderBannerInfo={filteredProviderBannerInfo}
-        providerBannerInfo={providerBannerInfo}
-        setProviderBannerInfo={setProviderBannerInfo}
-      /> */}
+      <FilterContainer providers={allProvidersForFilters} routeId="/_private/" />
 
       <div className="flex">
         <div className="px-0 pt-5 text-description-text">
-          {numberOfProviders()} {t("providers.healthcareProvidersContainer.providersFound")}
+          {isLoading ? (
+            <>
+              {t("providers.healthcareProvidersContainer.loading", { defaultValue: "Loading..." })}
+            </>
+          ) : (
+            <>
+              {providerBannerInfo.length}{" "}
+              {t("providers.healthcareProvidersContainer.providersFound")}
+            </>
+          )}
         </div>
       </div>
     </div>

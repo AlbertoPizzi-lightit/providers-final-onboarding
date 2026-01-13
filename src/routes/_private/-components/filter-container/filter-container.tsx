@@ -1,109 +1,210 @@
-// import { type ChangeEvent, useCallback, useState } from "react";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
-// import { Button, DropdownMenu } from "@/components/ui";
-// import { SearchIcon } from "../icons/search-icon";
-// import { defaultAllOption, defaultFilterNames, selectedFilters } from "./constants";
-// import { getClinics, getGenders, getSpecialties } from "./functions";
-// import type {  FilterKeys, MenuDataType, SelectedFilter } from "./types";
-// import { useDebounce } from "@/hooks/use-debounce";
+import { Button, DropdownMenu } from "@/components/ui";
+import { useDebounce, useProviderFilters } from "@/hooks";
+import type { Providers } from "@/services";
+import { SearchIcon } from "../icons/search-icon";
+import { defaultFilterNames } from "./constants";
+import { getClinics, getGenders, getSpecialties } from "./functions";
+import type { FilterKeys, MenuDataType } from "./types";
 
-// export const FilterContainer = () => {
-//   const [selectedFilter, setSelectedFilter] = useState<SelectedFilter>(selectedFilters);
+type FilterContainerProps = {
+  providers: Providers[];
+  routeId: string;
+};
 
-//   const [searchValue, setSearchValue] = useState("");
+export const FilterContainer = ({ providers, routeId }: FilterContainerProps) => {
+  const { t } = useTranslation();
+  const { actions, filters } = useProviderFilters(routeId as never);
 
-//   const filterFunction = (selectedOption: string, filterName: FilterKeys) => {
+  const [localSearchValue, setLocalSearchValue] = useState(filters.name ?? "");
 
-//   };
+  useEffect(() => {
+    setLocalSearchValue(filters.name ?? "");
+  }, [filters.name]);
 
-//   const handleSearch = () =>{};
+  const debouncedSearchValue = useDebounce(localSearchValue, 200);
 
-//   const debouncedHandleSearch = useDebounce(handleSearch , 2000);
+  useEffect(() => {
+    actions.setFilter("name", debouncedSearchValue || undefined);
+  }, [debouncedSearchValue, actions]);
 
-//   const clinics = getClinics(
-//     providerBannerInfo.flatMap((data) => {
-//       return data.clinics;
-//     }),
-//   );
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLocalSearchValue(e.target.value);
+  };
 
-//   const specialties = getSpecialties(
-//     providerBannerInfo.flatMap((data) => {
-//       return data.doctorSpecialty;
-//     }),
-//   );
+  const handleFilterChange = (
+    selectedOption: { id?: string | number; label: string },
+    filterName: FilterKeys,
+  ) => {
+    const filterKeyMap: Record<FilterKeys, keyof typeof filters> = {
+      specialties: "specialty_id",
+      genders: "gender",
+      clinics: "clinic_id",
+    };
 
-//   const genders = getGenders(
-//     providerBannerInfo.flatMap((data) => {
-//       return data.gender;
-//     }),
-//   );
+    const filterKey = filterKeyMap[filterName];
+    const currentValue = filters[filterKey];
 
-//   const menuData: MenuDataType = {
-//     specialties: {
-//       name: "specialties",
-//       options: specialties,
-//       filterData: filterFunction,
-//     },
+    if (
+      selectedOption.label === defaultFilterNames[filterName] ||
+      String(selectedOption.id) === currentValue
+    ) {
+      actions.setFilter(filterKey, undefined);
+    } else if (selectedOption.id !== undefined) {
+      actions.setFilter(filterKey, String(selectedOption.id));
+    } else {
+      actions.setFilter(filterKey, selectedOption.label.toLowerCase());
+    }
+  };
 
-//     genders: {
-//       name: "genders",
-//       options: genders,
-//       filterData: filterFunction,
-//     },
+  const clinics = getClinics(
+    providers.flatMap((data) => {
+      return data.clinics;
+    }),
+  );
 
-//     clinics: {
-//       name: "clinics",
-//       options: clinics,
-//       filterData: filterFunction,
-//     },
-//   };
+  const specialties = getSpecialties(
+    providers.map((data) => {
+      return { id: data.specialty.id, name: data.specialty.name };
+    }),
+  );
 
-//   return (
-//     <div className="flex flex-col">
-//       <div className="relative">
-//         <SearchIcon className="absolute top-2 left-3 size-5 text-disabled-text" />
-//         <input
-//           className="focus:ring-primary/60 focus:border-primary/60 w-full rounded-md border border-border px-3 py-2 ps-10 text-sm placeholder:text-gray-400 focus:ring-2 focus:outline-none"
-//           id="searchProviders"
-//           name="searchProviders"
-//           onChange={debouncedHandleSearch}
-//           placeholder="Search providers by name..."
-//           type="text"
-//         />
-//       </div>
+  const genders = getGenders(
+    providers.map((data) => {
+      return data.gender;
+    }),
+  );
 
-//       <div className="flex flex-wrap gap-5 pt-5 sm:gap-1">
-//         {Object.values(menuData).map((data, index) => {
-//           return (
-//             <div className="relative w-full min-w-70 md:max-w-[70px]" key={data.name + index}>
-//               <DropdownMenu.Root>
-//                 <DropdownMenu.Trigger
-//                   className="flex w-full items-center justify-between rounded-lg border border-border bg-base-background p-3 text-base-text shadow-sm focus:ring-2 focus:ring-disabled-text focus:outline-none disabled:bg-disabled-text"
-//                   asChild
-//                 >
-//                   <Button className="ml-auto" variant="outlined">
-//                     {defaultFilterNames[data.name]}
-//                   </Button>
-//                 </DropdownMenu.Trigger>
+  const getCheckedOptions = (options: typeof clinics, filterKey: FilterKeys) => {
+    const filterKeyMap: Record<FilterKeys, keyof typeof filters> = {
+      specialties: "specialty_id",
+      genders: "gender",
+      clinics: "clinic_id",
+    };
 
-//                 <DropdownMenu.Content align="end" className="w-full">
-//                   {data.options.map((option) => {
-//                     return (
-//                       <DropdownMenu.CheckboxItem
-//                         checked={option.checked}
-//                         className="w-full capitalize"
-//                         key={option.label}
-//                       >
-//                         {option.label}
-//                       </DropdownMenu.CheckboxItem>
-//                     );
-//                   })}
-//                 </DropdownMenu.Content>
-//               </DropdownMenu.Root>
-//             </div>
-//           );
-//         })}
-//       </div>
-//     </div>
-//   );
-// };
+    const currentFilter = filters[filterKeyMap[filterKey]];
+
+    return options.map((option) => {
+      if (option.label === defaultFilterNames[filterKey]) {
+        return { ...option, checked: !currentFilter };
+      }
+      const isChecked =
+        String(option.id) === String(currentFilter) ||
+        option.label.toLowerCase() === String(currentFilter).toLowerCase();
+
+      return {
+        ...option,
+        checked:
+          (isChecked && String(option.label)?.toLowerCase() === currentFilter?.toLowerCase()) ||
+          String(option.id) === currentFilter,
+      };
+    });
+  };
+
+  const getFilterDisplayName = (filterName: FilterKeys, options: typeof clinics) => {
+    const filterKeyMap: Record<FilterKeys, keyof typeof filters> = {
+      specialties: "specialty_id",
+      genders: "gender",
+      clinics: "clinic_id",
+    };
+
+    const currentFilterId = filters[filterKeyMap[filterName]];
+
+    if (!currentFilterId) {
+      return defaultFilterNames[filterName];
+    }
+
+    const selectedOption = options.find((option) => {
+      return (
+        String(option.id) === String(currentFilterId) ||
+        option.label.toLowerCase() === String(currentFilterId).toLowerCase()
+      );
+    });
+
+    return selectedOption?.label || defaultFilterNames[filterName];
+  };
+
+  const menuData: MenuDataType = {
+    specialties: {
+      name: "specialties",
+      options: getCheckedOptions(specialties, "specialties"),
+      filterData: handleFilterChange,
+    },
+    genders: {
+      name: "genders",
+      options: getCheckedOptions(genders, "genders"),
+      filterData: handleFilterChange,
+    },
+    clinics: {
+      name: "clinics",
+      options: getCheckedOptions(clinics, "clinics"),
+      filterData: handleFilterChange,
+    },
+  };
+
+  return (
+    <div className="flex flex-col">
+      <div className="relative">
+        <SearchIcon className="absolute top-2 left-3 size-5 text-disabled-text" />
+        <input
+          className="focus:ring-primary/60 focus:border-primary/60 w-full rounded-md border border-border px-3 py-2 ps-10 text-sm placeholder:text-gray-400 focus:ring-2 focus:outline-none"
+          id="searchProviders"
+          name="searchProviders"
+          onChange={handleSearch}
+          placeholder={t("providers.filterContainer.searchPlaceholder", {
+            defaultValue: "Search providers by name...",
+          })}
+          type="text"
+          value={localSearchValue}
+        />
+      </div>
+
+      <div className="flex flex-wrap gap-5 pt-5 sm:gap-1">
+        {Object.values(menuData).map((data, index) => {
+          return (
+            <div
+              className="relative w-full min-w-70 overflow-hidden md:max-w-[70px]"
+              key={data.name + index}
+            >
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger
+                  className="flex w-full items-center justify-between overflow-hidden rounded-lg border border-border bg-base-background p-3 text-base-text shadow-sm focus:ring-2 focus:ring-disabled-text focus:outline-none disabled:bg-disabled-text"
+                  asChild
+                >
+                  <Button
+                    aria-label={
+                      "This is a dropdown Menu for " + getFilterDisplayName(data.name, data.options)
+                    }
+                    className="ml-auto"
+                    variant="outlined"
+                  >
+                    {getFilterDisplayName(data.name, data.options)}
+                  </Button>
+                </DropdownMenu.Trigger>
+
+                <DropdownMenu.Content align="end" className="w-full text-ellipsis">
+                  {data.options.map((option, index) => {
+                    return (
+                      <DropdownMenu.CheckboxItem
+                        checked={option.checked}
+                        className="w-full capitalize"
+                        key={option.label + index}
+                        onCheckedChange={() => {
+                          data.filterData(option, data.name);
+                        }}
+                      >
+                        {option.label}
+                      </DropdownMenu.CheckboxItem>
+                    );
+                  })}
+                </DropdownMenu.Content>
+              </DropdownMenu.Root>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
