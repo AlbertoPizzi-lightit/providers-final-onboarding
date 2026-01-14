@@ -126,6 +126,10 @@
     },
     "profile": {
       "name": "AS"
+    },
+    "isLoading":{
+      "more": "Loading more providers...",
+      "loading": "Loading..."
     }
   }
 }

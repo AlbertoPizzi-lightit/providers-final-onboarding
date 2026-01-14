@@ -4,13 +4,13 @@ import type { Providers } from "@/services";
 import { FilterContainer } from "./filter-container";
 
 type HealthCareProvidersContainerProps = {
-  allProvidersForFilters: Providers[];
+  filterSourceProviders: Providers[];
   isLoading?: boolean;
   providerBannerInfo: Providers[];
 };
 
 export const HealthProvidersContainer = ({
-  allProvidersForFilters,
+  filterSourceProviders,
   isLoading = false,
   providerBannerInfo,
 }: HealthCareProvidersContainerProps) => {
@@ -28,14 +28,12 @@ export const HealthProvidersContainer = ({
         </p>
       </article>
 
-      <FilterContainer providers={allProvidersForFilters} routeId="/_private/" />
+      <FilterContainer providers={filterSourceProviders} routeId="/_private/" />
 
       <div className="flex">
         <div className="px-0 pt-5 text-description-text">
           {isLoading ? (
-            <>
-              {t("providers.healthcareProvidersContainer.loading", { defaultValue: "Loading..." })}
-            </>
+            <>{t("providers.isLoading.loading")}</>
           ) : (
             <>
               {providerBannerInfo.length}{" "}

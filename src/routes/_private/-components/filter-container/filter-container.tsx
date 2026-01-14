@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { Button, DropdownMenu } from "@/components/ui";
 import { useDebounce, useProviderFilters } from "@/hooks";
-import type { Providers } from "@/services";
+import { PROVIDER_FILTER_KEYS, type Providers } from "@/services";
 import { SearchIcon } from "../icons/search-icon";
 import { defaultFilterNames } from "./constants";
 import { getClinics, getGenders, getSpecialties } from "./functions";
@@ -39,9 +39,9 @@ export const FilterContainer = ({ providers, routeId }: FilterContainerProps) =>
     filterName: FilterKeys,
   ) => {
     const filterKeyMap: Record<FilterKeys, keyof typeof filters> = {
-      specialties: "specialty_id",
-      genders: "gender",
-      clinics: "clinic_id",
+      specialties: PROVIDER_FILTER_KEYS.SPECIALTY_ID,
+      genders: PROVIDER_FILTER_KEYS.GENDER,
+      clinics: PROVIDER_FILTER_KEYS.CLINIC_ID,
     };
 
     const filterKey = filterKeyMap[filterName];
@@ -79,9 +79,9 @@ export const FilterContainer = ({ providers, routeId }: FilterContainerProps) =>
 
   const getCheckedOptions = (options: typeof clinics, filterKey: FilterKeys) => {
     const filterKeyMap: Record<FilterKeys, keyof typeof filters> = {
-      specialties: "specialty_id",
-      genders: "gender",
-      clinics: "clinic_id",
+      specialties: PROVIDER_FILTER_KEYS.SPECIALTY_ID,
+      genders: PROVIDER_FILTER_KEYS.GENDER,
+      clinics: PROVIDER_FILTER_KEYS.CLINIC_ID,
     };
 
     const currentFilter = filters[filterKeyMap[filterKey]];
@@ -105,9 +105,9 @@ export const FilterContainer = ({ providers, routeId }: FilterContainerProps) =>
 
   const getFilterDisplayName = (filterName: FilterKeys, options: typeof clinics) => {
     const filterKeyMap: Record<FilterKeys, keyof typeof filters> = {
-      specialties: "specialty_id",
-      genders: "gender",
-      clinics: "clinic_id",
+      specialties: PROVIDER_FILTER_KEYS.SPECIALTY_ID,
+      genders: PROVIDER_FILTER_KEYS.GENDER,
+      clinics: PROVIDER_FILTER_KEYS.CLINIC_ID,
     };
 
     const currentFilterId = filters[filterKeyMap[filterName]];

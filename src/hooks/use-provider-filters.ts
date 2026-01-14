@@ -1,14 +1,7 @@
 import { getRouteApi } from "@tanstack/react-router";
-import { z } from "zod";
 
 import type { AvailableRoutesId } from "@/config/router";
-
-export const providerFiltersValidation = z.object({
-  name: z.string().optional(),
-  specialty_id: z.string().optional(),
-  gender: z.string().optional(),
-  clinic_id: z.string().optional(),
-});
+import { providerFiltersValidation } from "@/services";
 
 export const useProviderFilters = (path: AvailableRoutesId) => {
   const { useNavigate, useSearch } = getRouteApi(path);

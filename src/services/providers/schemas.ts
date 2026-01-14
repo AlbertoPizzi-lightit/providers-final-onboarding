@@ -58,3 +58,10 @@ export const getProvidersSchema = () => {
 export const parseProvidersResponse = (response: unknown) => {
   return getProvidersSchema().parse(response);
 };
+
+export const providerFiltersValidation = z.object({
+  name: z.string().optional(),
+  specialty_id: z.string().optional(),
+  gender: z.string().optional(),
+  clinic_id: z.string().optional(),
+});
