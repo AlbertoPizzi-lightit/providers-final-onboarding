@@ -3,5 +3,4 @@
   "tailwindCSS.experimental.classRegex": [
     ["([\"'`][^\"'`]*.*?[\"'`])", "[\"'`]([^\"'`]*).*?[\"'`]"]
   ],
-  "exportall.config.relExclusion": ["/src/hooks/index.ts", "/src/hooks/use-provider-filters.ts"]
 }
