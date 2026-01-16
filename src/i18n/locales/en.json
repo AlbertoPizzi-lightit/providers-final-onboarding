@@ -108,5 +108,36 @@
       "dashboard": "Dashboard",
       "users": "Users"
     }
+  },
+  "providers": {
+    "healthcareProvidersContainer": {
+      "title": "Healthcare Providers",
+      "description": "Find and connect with healthcare professionals in your area",
+      "providersFound": "providers found"
+    },
+    "filterContainer": {
+      "searchPlaceholder": "Search providers by name..."
+    },
+    "banner": {
+      "plus": "+",
+      "locations": "more locations",
+      "viewDetails": "View Details"
+    },
+    "logo": {
+      "title": "HealthConnect",
+      "description": "Find your healthcare provider"
+    },
+    "profile": {
+      "name": "AS"
+    },
+    "isLoading": {
+      "more": "Loading more providers...",
+      "loading": "Loading..."
+    },
+    "aria": {
+      "dropdownMenu": "This is a dropdown Menu for ",
+      "viewDetails": "This is a view details button.",
+      "providerPicture": "This is an picture of Dr."
+    }
   }
 }
