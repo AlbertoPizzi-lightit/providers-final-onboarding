@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 
+import { Icons } from "@/components";
 import type { Providers } from "@/services";
-import { LocationIcon } from "./icons/location-icon";
 
 export const ProviderBanner = ({ clinics, name, profilePic, specialty }: Providers) => {
   const { t } = useTranslation();
@@ -27,7 +27,7 @@ export const ProviderBanner = ({ clinics, name, profilePic, specialty }: Provide
 
         <article className="flex gap-2 px-5 py-1.5">
           <div className="h-full px-0 py-1">
-            <LocationIcon className="text-disabled-text" />
+            <Icons.MapPin className="text-disabled-text" />
           </div>
 
           <article className="flex flex-col text-description-text">

@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 
-import { LogoIcon } from "./icons/logo-icon";
+import { Icons } from "@/components";
 
 export const Logo = () => {
   const { t } = useTranslation();
@@ -8,7 +8,7 @@ export const Logo = () => {
   return (
     <div className="flex gap-2.5">
       <div className="flex size-12 items-center justify-center rounded-md bg-button p-2">
-        <LogoIcon className="text-base-background" />
+        <Icons.LogoIcon className="size-20 text-base-background" />
       </div>
 
       <div className="text-left text-text-default">

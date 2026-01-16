@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Button, DropdownMenu } from "@/components/ui";
+import { Button, DropdownMenu, Icons } from "@/components/ui";
 import { useDebounce, useProviderFilters } from "@/hooks";
 import {
   filterKeyMap,
@@ -10,7 +10,6 @@ import {
   PROVIDER_FILTER_KEYS,
   type Providers,
 } from "@/services";
-import { SearchIcon } from "../icons/search-icon";
 import { defaultFilterNames } from "./constants";
 import { getClinics, getGenders, getSpecialties } from "./functions";
 import type { MenuDataType } from "./types";
@@ -134,7 +133,7 @@ export const FilterContainer = ({ providers }: FilterContainerProps) => {
   return (
     <div className="flex flex-col">
       <div className="relative">
-        <SearchIcon className="absolute top-2 left-3 size-5 text-disabled-text" />
+        <Icons.Search className="absolute top-2 left-3 size-5 text-disabled-text" />
         <input
           className="focus:ring-primary/60 focus:border-primary/60 w-full rounded-md border border-border px-3 py-2 ps-10 text-sm placeholder:text-gray-400 focus:ring-2 focus:outline-none"
           id="searchProviders"
@@ -146,7 +145,7 @@ export const FilterContainer = ({ providers }: FilterContainerProps) => {
         />
       </div>
 
-      <div className="flex flex-wrap gap-5 pt-5 sm:gap-1">
+      <div className="flex flex-wrap gap-1 pt-5 sm:gap-5">
         {Object.values(menuData).map((data, index) => {
           return (
             <div

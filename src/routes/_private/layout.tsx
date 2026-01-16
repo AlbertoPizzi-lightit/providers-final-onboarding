@@ -1,10 +1,17 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 import { getAuthStoreState } from "@/stores";
+import { Header, Logo, Nav, ProfilePicture } from "./-components";
 
 const PrivateLayout = () => {
   return (
     <div>
+      <Header>
+        <Nav>
+          <Logo />
+          <ProfilePicture />
+        </Nav>
+      </Header>
       <Outlet />
     </div>
   );

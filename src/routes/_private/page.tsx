@@ -11,11 +11,7 @@ import {
   useProviders,
 } from "@/services";
 import {
-  Header,
   HealthProvidersContainer,
-  Logo,
-  Nav,
-  ProfilePicture,
   ProviderBanner,
   ProvidersContainer,
   TableHeaderContainer,
@@ -76,14 +72,6 @@ const ProvidersPage = () => {
 
   return (
     <div className="mx-auto my-0 flex h-full max-w-6xl flex-col pt-25">
-      <Header>
-        <Nav>
-          <Logo />
-
-          <ProfilePicture />
-        </Nav>
-      </Header>
-
       <TableHeaderContainer>
         <HealthProvidersContainer
           filterSourceProviders={allProvidersData?.data ?? []}
