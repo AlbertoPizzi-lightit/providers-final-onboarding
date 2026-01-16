@@ -115,6 +115,9 @@
       "description": "Find and connect with healthcare professionals in your area",
       "providersFound": "providers found"
     },
+    "filterContainer": {
+      "searchPlaceholder": "Search providers by name..."
+    },
     "banner": {
       "plus": "+",
       "locations": "more locations",
@@ -130,6 +133,11 @@
     "isLoading": {
       "more": "Loading more providers...",
       "loading": "Loading..."
+    },
+    "aria": {
+      "dropdownMenu": "This is a dropdown Menu for ",
+      "viewDetails": "This is a view details button.",
+      "providerPicture": "This is an picture of Dr."
     }
   }
 }

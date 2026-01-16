@@ -1,10 +1,9 @@
 import { getRouteApi } from "@tanstack/react-router";
 
-import type { AvailableRoutesId } from "@/config/router";
-import { providerFiltersValidation } from "@/services";
+import { providerFiltersValidation, PROVIDERS_ROUTE_ID } from "@/services";
 
-export const useProviderFilters = (path: AvailableRoutesId) => {
-  const { useNavigate, useSearch } = getRouteApi(path);
+export const useProviderFilters = () => {
+  const { useNavigate, useSearch } = getRouteApi(PROVIDERS_ROUTE_ID);
 
   const search = useSearch();
   const navigate = useNavigate();

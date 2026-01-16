@@ -23,7 +23,7 @@ import {
 
 const ProvidersPage = () => {
   const { t } = useTranslation();
-  const { filters } = useProviderFilters(Route.id);
+  const { filters } = useProviderFilters();
   const debouncedName = useDebounce(filters.name, 500);
   const loadMoreRef = useRef<HTMLDivElement>(null);
 

@@ -3,20 +3,25 @@ import { useTranslation } from "react-i18next";
 
 import { Button, DropdownMenu } from "@/components/ui";
 import { useDebounce, useProviderFilters } from "@/hooks";
-import { PROVIDER_FILTER_KEYS, type Providers } from "@/services";
+import {
+  filterKeyMap,
+  type FilterKeys,
+  MenuOptions,
+  PROVIDER_FILTER_KEYS,
+  type Providers,
+} from "@/services";
 import { SearchIcon } from "../icons/search-icon";
 import { defaultFilterNames } from "./constants";
 import { getClinics, getGenders, getSpecialties } from "./functions";
-import type { FilterKeys, MenuDataType } from "./types";
+import type { MenuDataType } from "./types";
 
 type FilterContainerProps = {
   providers: Providers[];
-  routeId: string;
 };
 
-export const FilterContainer = ({ providers, routeId }: FilterContainerProps) => {
+export const FilterContainer = ({ providers }: FilterContainerProps) => {
   const { t } = useTranslation();
-  const { actions, filters } = useProviderFilters(routeId as never);
+  const { actions, filters } = useProviderFilters();
 
   const [localSearchValue, setLocalSearchValue] = useState(filters.name ?? "");
 
@@ -27,7 +32,7 @@ export const FilterContainer = ({ providers, routeId }: FilterContainerProps) =>
   const debouncedSearchValue = useDebounce(localSearchValue, 200);
 
   useEffect(() => {
-    actions.setFilter("name", debouncedSearchValue || undefined);
+    actions.setFilter(PROVIDER_FILTER_KEYS.NAME, debouncedSearchValue || undefined);
   }, [debouncedSearchValue, actions]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,12 +43,6 @@ export const FilterContainer = ({ providers, routeId }: FilterContainerProps) =>
     selectedOption: { id?: string | number; label: string },
     filterName: FilterKeys,
   ) => {
-    const filterKeyMap: Record<FilterKeys, keyof typeof filters> = {
-      specialties: PROVIDER_FILTER_KEYS.SPECIALTY_ID,
-      genders: PROVIDER_FILTER_KEYS.GENDER,
-      clinics: PROVIDER_FILTER_KEYS.CLINIC_ID,
-    };
-
     const filterKey = filterKeyMap[filterName];
     const currentValue = filters[filterKey];
 
@@ -78,12 +77,6 @@ export const FilterContainer = ({ providers, routeId }: FilterContainerProps) =>
   );
 
   const getCheckedOptions = (options: typeof clinics, filterKey: FilterKeys) => {
-    const filterKeyMap: Record<FilterKeys, keyof typeof filters> = {
-      specialties: PROVIDER_FILTER_KEYS.SPECIALTY_ID,
-      genders: PROVIDER_FILTER_KEYS.GENDER,
-      clinics: PROVIDER_FILTER_KEYS.CLINIC_ID,
-    };
-
     const currentFilter = filters[filterKeyMap[filterKey]];
 
     return options.map((option) => {
@@ -104,12 +97,6 @@ export const FilterContainer = ({ providers, routeId }: FilterContainerProps) =>
   };
 
   const getFilterDisplayName = (filterName: FilterKeys, options: typeof clinics) => {
-    const filterKeyMap: Record<FilterKeys, keyof typeof filters> = {
-      specialties: PROVIDER_FILTER_KEYS.SPECIALTY_ID,
-      genders: PROVIDER_FILTER_KEYS.GENDER,
-      clinics: PROVIDER_FILTER_KEYS.CLINIC_ID,
-    };
-
     const currentFilterId = filters[filterKeyMap[filterName]];
 
     if (!currentFilterId) {
@@ -128,18 +115,18 @@ export const FilterContainer = ({ providers, routeId }: FilterContainerProps) =>
 
   const menuData: MenuDataType = {
     specialties: {
-      name: "specialties",
-      options: getCheckedOptions(specialties, "specialties"),
+      name: MenuOptions.specialties,
+      options: getCheckedOptions(specialties, MenuOptions.specialties),
       filterData: handleFilterChange,
     },
     genders: {
-      name: "genders",
-      options: getCheckedOptions(genders, "genders"),
+      name: MenuOptions.genders,
+      options: getCheckedOptions(genders, MenuOptions.genders),
       filterData: handleFilterChange,
     },
     clinics: {
-      name: "clinics",
-      options: getCheckedOptions(clinics, "clinics"),
+      name: MenuOptions.clinics,
+      options: getCheckedOptions(clinics, MenuOptions.clinics),
       filterData: handleFilterChange,
     },
   };
@@ -153,9 +140,7 @@ export const FilterContainer = ({ providers, routeId }: FilterContainerProps) =>
           id="searchProviders"
           name="searchProviders"
           onChange={handleSearch}
-          placeholder={t("providers.filterContainer.searchPlaceholder", {
-            defaultValue: "Search providers by name...",
-          })}
+          placeholder={t("providers.filterContainer.searchPlaceholder")}
           type="text"
           value={localSearchValue}
         />
@@ -175,7 +160,8 @@ export const FilterContainer = ({ providers, routeId }: FilterContainerProps) =>
                 >
                   <Button
                     aria-label={
-                      "This is a dropdown Menu for " + getFilterDisplayName(data.name, data.options)
+                      t("providers.aria.dropdownMenu") +
+                      getFilterDisplayName(data.name, data.options)
                     }
                     className="ml-auto"
                     variant="outlined"

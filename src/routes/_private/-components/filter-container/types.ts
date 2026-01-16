@@ -1,4 +1,4 @@
-export type FilterKeys = "specialties" | "genders" | "clinics";
+import type { FilterKeys } from "@/services";
 
 export type SelectedFilter = Record<
   FilterKeys,

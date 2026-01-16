@@ -28,7 +28,7 @@ export const HealthProvidersContainer = ({
         </p>
       </article>
 
-      <FilterContainer providers={filterSourceProviders} routeId="/_private/" />
+      <FilterContainer providers={filterSourceProviders} />
 
       <div className="flex">
         <div className="px-0 pt-5 text-description-text">

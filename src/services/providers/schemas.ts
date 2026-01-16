@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { Gender } from "./types";
+import { Gender } from "./constants";
 
 export const getProvidersSchema = () => {
   return z

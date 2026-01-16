@@ -22,12 +22,6 @@ export type Clinic = {
   phone: string;
 };
 
-export const Gender = {
-  Female: "female",
-  Male: "male",
-  Other: "other",
-} as const;
-
 export type Specialty = {
   id: number;
   name: string;

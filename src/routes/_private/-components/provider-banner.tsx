@@ -11,7 +11,7 @@ export const ProviderBanner = ({ clinics, name, profilePic, specialty }: Provide
       <div className="relative">
         <div className="h-55 w-88">
           <img
-            alt={`This is an picture of dr. ${name}`}
+            alt={`${t("providers.aria.providerPicture")} + ${name}`}
             className="aspect-square h-full w-full object-cover"
             src={profilePic}
           />
@@ -39,7 +39,7 @@ export const ProviderBanner = ({ clinics, name, profilePic, specialty }: Provide
 
         <div className="justify-center p-5">
           <button
-            aria-label="This is a view details button"
+            aria-label={t("providers.aria.viewDetails")}
             className="h-10 w-75 rounded-md border-0 bg-button text-base-background"
           >
             {t("providers.banner.viewDetails")}

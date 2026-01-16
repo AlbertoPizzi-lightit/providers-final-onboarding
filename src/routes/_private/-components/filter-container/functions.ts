@@ -2,46 +2,65 @@ import { uppercaseFirstLetter } from "@/utils";
 import { selectedFilters } from "./constants";
 import type { ProvidersDropdownOptionsType } from "./types";
 
-export const getClinics = (
-  clinics: Array<{ id: number; name: string }>,
-): ProvidersDropdownOptionsType => {
-  const uniqueClinicsMap = new Map<number, { id: number; name: string }>();
-
-  clinics.forEach((clinic) => {
-    if (!uniqueClinicsMap.has(clinic.id)) {
-      uniqueClinicsMap.set(clinic.id, clinic);
-    }
-  });
-
-  const uniqueClinics = Array.from(uniqueClinicsMap.values()).map((clinic) => {
-    return { id: clinic.id, label: clinic.name, checked: false };
-  });
-
-  return [selectedFilters.clinics, ...uniqueClinics];
+type WithIdAndName = {
+  id: number;
+  name: string;
 };
 
-export const getSpecialties = (
-  specialties: Array<{ id: number; name: string }>,
+type ReturnMapUniqueById = Array<{ id: number; label: string; checked: false }>;
+
+type ReturnMapUniqueStrings = Array<{ label: string; checked: false }>;
+
+const mapUniqueById = <T extends WithIdAndName>(items: T[]): ReturnMapUniqueById => {
+  return Array.from(
+    new Map(
+      items.map((item) => {
+        return [item.id, item];
+      }),
+    ).values(),
+  ).map(({ id, name }) => {
+    return {
+      id,
+      label: name,
+      checked: false,
+    };
+  });
+};
+
+const mapUniqueStrings = (
+  items: string[],
+  formatLabel: (value: string) => string = (v) => {
+    return v;
+  },
+): ReturnMapUniqueStrings => {
+  return Array.from(new Set(items)).map((value) => {
+    return {
+      label: formatLabel(value),
+      checked: false,
+    };
+  });
+};
+
+type MapResultOptions = ReturnMapUniqueById | ReturnMapUniqueStrings;
+
+const mappedDropdownOptions = (
+  defaultOption: { label: string; checked: boolean },
+  mappedData: MapResultOptions,
 ): ProvidersDropdownOptionsType => {
-  const uniqueSpecialtiesMap = new Map<number, { id: number; name: string }>();
+  return [defaultOption, ...mappedData];
+};
 
-  specialties.forEach((specialty) => {
-    if (!uniqueSpecialtiesMap.has(specialty.id)) {
-      uniqueSpecialtiesMap.set(specialty.id, specialty);
-    }
-  });
+export const getClinics = (clinics: WithIdAndName[]): ProvidersDropdownOptionsType => {
+  return mappedDropdownOptions(selectedFilters.clinics, mapUniqueById(clinics));
+};
 
-  const uniqueSpecialties = Array.from(uniqueSpecialtiesMap.values()).map((specialty) => {
-    return { id: specialty.id, label: specialty.name, checked: false };
-  });
-
-  return [selectedFilters.specialties, ...uniqueSpecialties];
+export const getSpecialties = (specialties: WithIdAndName[]): ProvidersDropdownOptionsType => {
+  return mappedDropdownOptions(selectedFilters.specialties, mapUniqueById(specialties));
 };
 
 export const getGenders = (genders: string[]): ProvidersDropdownOptionsType => {
-  const uniqueGenders = Array.from(new Set(genders)).map((gender) => {
-    return { label: uppercaseFirstLetter(gender), checked: false };
-  });
-
-  return [selectedFilters.genders, ...uniqueGenders];
+  return mappedDropdownOptions(
+    selectedFilters.genders,
+    mapUniqueStrings(genders, uppercaseFirstLetter),
+  );
 };
